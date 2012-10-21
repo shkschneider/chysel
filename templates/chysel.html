@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="{{ chysel.site.url }}css/bootstrap.css" rel="stylesheet">
+    <link href="{{ chysel.site.url }}css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">body { padding-top: 60px; }</style>
-    <link href="{{ chysel.site.url }}css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{ chysel.site.url }}css/bootstrap-responsive.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" href="{{ chysel.site.url }}img/favicon.ico">
     {% block header %}{% endblock %}
   </head>
   <body>
@@ -40,5 +40,6 @@
       {% block footer %}{% endblock %}
       Powered by <a href="https://github.com/shkschneider/chysel">Chysel</a>.
     </div>
+    <script type="text/javascript" src="{{ chysel.site.url }}js/bootstrap.min.js"></script>
   </body>
 </html>
