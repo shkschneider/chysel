@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# chisel
-#   David Zhou <https://github.com/dz/chisel>
+# chysel
 #   Alan Schneider <https://github.com/shkschneider/chisel>
+#   David Zhou <https://github.com/dz/chisel>
 #
 
 ### DEPENDS: jinja2 markdown ###
@@ -22,17 +22,20 @@ except ImportError as error:
 
 ### SETTINGS ###
 
-INPUT = './content/' # ends with slash
-OUTPUT = './www/' # ends with slash
-BASE_URL = '/' # ends with slash
+SITE = {'url': 'http://shkschneider.me/', # trailing slash
+        'name': 'Chysel'}
+
+INPUT = './content/' # trailing slash
+OUTPUT = './www/' # trailing slash
 HOME_SHOW = 15
 TEMPLATE_PATH = './templates/'
 TEMPLATE_OPTIONS = {}
 TEMPLATES = {'index': 'index.html',
-             'page': 'page.html',
-             'archive': 'archive.html'}
+             'entry': 'entry.html',
+             'archive': 'archives.html',
+             'about': 'about.html'}
 TIME_FORMAT = '%B %d, %Y'
-ENTRY_TIME_FORMAT = '%m/%d/%Y'
+ENTRY_TIME_FORMAT = '%Y/%m/%d'
 FORMAT = lambda text: markdown.markdown(text, ['footnotes'])
 
 ### DO NOT EDIT BELOW THIS LINE ###
@@ -59,15 +62,9 @@ def get_tree(source):
                 year, month, day = date[:3]
                 f.readline()
                 files.append({'title': title,
-                              'epoch': time.mktime(date),
                               'content': ''.join(f.readlines()).decode('UTF-8'),
                               'url': '%.4d/%.2d/%.2d/%s.html' % (year, month, day, name),
-                              'pretty_date': time.strftime(TIME_FORMAT, date),
-                              'date': date,
-                              'year': year,
-                              'month': month,
-                              'day': day,
-                              'filename': name})
+                              'date': time.strftime(TIME_FORMAT, date)})
     return files
 
 def compare_entries(x, y):
@@ -88,20 +85,26 @@ def write_file(url, data):
 def step_index(f, e):
     '''Generate homepage'''
     template = e.get_template(TEMPLATES['index'])
-    write_file('index.html', template.render(entries=f[:HOME_SHOW]))
+    write_file('index.html', template.render(chysel={'entries': f[:HOME_SHOW], 'site': SITE}))
 
 @step
-def step_page(f, e):
+def step_entries(f, e):
     '''Generate detail pages of individual posts'''
-    template = e.get_template(TEMPLATES['page'])
+    template = e.get_template(TEMPLATES['entry'])
     for file in f:
-        write_file(file['url'], template.render(entry=file))
+        write_file(file['url'], template.render(chysel={'entry': file, 'site': SITE}))
 
 @step
 def step_archive(f, e):
     '''Generate master archive list of all entries'''
     template = e.get_template(TEMPLATES['archive'])
-    write_file('archive.html', template.render(entries=f))
+    write_file('archives/index.html', template.render(chysel={'entries': f, 'site': SITE}))
+
+@step
+def step_about(f, e):
+    '''Generate about page'''
+    template = e.get_template(TEMPLATES['about'])
+    write_file('about/index.html', template.render(chysel={'entry': f, 'site': SITE}))
 
 @step
 def step_assets(f, e):
@@ -109,8 +112,8 @@ def step_assets(f, e):
     for name in [name for name in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, name))]:
         dir_util.copy_tree(TEMPLATE_PATH + name, OUTPUT + name)
 
-def main():
-    print 'Chiseling...'
+if __name__ == '__main__':
+    print 'Chyseling...'
     print '* Reading files...',
     files = sorted(get_tree(INPUT), cmp=compare_entries)
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
@@ -120,6 +123,3 @@ def main():
         print '  ',
         step(files, env)
     print 'Done.'
-
-if __name__ == '__main__':
-    sys.exit(main())

@@ -1,14 +1,9 @@
 {% extends "base.html" %}
 
-{% block main %}
-    {% for entry in entries %}
-        <div class="entry">
-            <h2><a href="/{{ entry.url }}">{{ entry.title }}</a></h2>
-            <h3>{{ entry.pretty_date }}</h3>
-            <div class="entry_content">
-                {{ entry.content }}
-            </div>
-            <p class="permalink"><a href="/{{ entry.url }}">#permalink</a></p>
-        </div>
-    {% endfor %}
+{% block content %}
+  <h1>{{ chysel.site.name }}</h1>
+  <hr />
+  {% for entry in chysel.entries %}
+     <p><a href="{{ chysel.site.url }}{{ entry.url }}">{{ entry.date }} &mdash; {{ entry.title }}</a></p>
+  {% endfor %}
 {% endblock %}
