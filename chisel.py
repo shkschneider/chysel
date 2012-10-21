@@ -24,6 +24,7 @@ except ImportError as error:
 
 INPUT = './content/' # ends with slash
 OUTPUT = './www/' # ends with slash
+BASE_URL = '/' # ends with slash
 HOME_SHOW = 15
 TEMPLATE_PATH = './templates/'
 TEMPLATE_OPTIONS = {}
@@ -56,10 +57,11 @@ def get_tree(source):
                 title = f.readline()
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
+                f.readline()
                 files.append({'title': title,
                               'epoch': time.mktime(date),
-                              'content': FORMAT(''.join(f.readlines()[1:]).decode('UTF-8')),
-                              'url': '/'.join([str(year), '%.2d' % month, '%.2d' % day, os.path.splitext(name)[0] + '.html']),
+                              'content': ''.join(f.readlines()).decode('UTF-8'),
+                              'url': '%.4d/%.2d/%.2d/%s.html' % (year, month, day, name),
                               'pretty_date': time.strftime(TIME_FORMAT, date),
                               'date': date,
                               'year': year,
@@ -103,7 +105,7 @@ def step_archive(f, e):
 
 @step
 def step_assets(f, e):
-    '''Copies assets'''
+    '''Copy assets (directories) from template to output folder'''
     for name in [name for name in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, name))]:
         dir_util.copy_tree(TEMPLATE_PATH + name, OUTPUT + name)
 
