@@ -29,10 +29,6 @@ INPUT = './content/' # trailing slash
 OUTPUT = './www/' # trailing slash
 TEMPLATE_PATH = './templates/'
 TEMPLATE_OPTIONS = {}
-TEMPLATES = {'index': 'index.html',
-             'entry': 'entry.html',
-             'archive': 'archives.html',
-             'about': 'about.html'}
 TIME_FORMAT = '%B %d, %Y'
 ENTRY_TIME_FORMAT = '%Y/%m/%d'
 FORMAT = lambda text: markdown.markdown(text, ['footnotes'])
@@ -56,7 +52,11 @@ def get_tree(source):
             path = os.path.join(root, name)
             with open(path, 'rU') as f:
                 title = f.readline()
+                name = path.replace(INPUT, '')
                 print '  -', name
+                category = os.path.dirname(name)
+                if len(category):
+                    title = category.capitalize() + '/ ' + title
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
                 f.readline()
@@ -65,7 +65,7 @@ def get_tree(source):
                               'title': title,
                               'except': content[:100],
                               'content': FORMAT(content),
-                              'url': '%.4d/%.2d/%.2d/%s/' % (year, month, day, name),
+                              'url': name + '/',
                               'date': time.strftime(TIME_FORMAT, date),
                               'epoch': time.mktime(date),
                               'year': year,
@@ -91,12 +91,12 @@ def write_file(url, data):
 @step
 def step_index(f, e):
     print '  %s%s -> %sindex.html' % (TEMPLATE_PATH, 'index.html', OUTPUT)
-    template = e.get_template(TEMPLATES['index'])
+    template = e.get_template('index.html')
     write_file('index.html', template.render(chysel={'entries': f, 'site': SITE}))
 
 @step
 def step_entries(f, e):
-    template = e.get_template(TEMPLATES['entry'])
+    template = e.get_template('entry.html')
     for file in f:
         print '  %s%s -> %s%sindex.html' % (INPUT, file['slug'], OUTPUT, file['url'])
         write_file(file['url'] + 'index.html', template.render(chysel={'entry': file, 'site': SITE}))
@@ -104,13 +104,13 @@ def step_entries(f, e):
 @step
 def step_archive(f, e):
     print '  %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'archives.html', OUTPUT, 'archives/')
-    template = e.get_template(TEMPLATES['archive'])
+    template = e.get_template('archives.html')
     write_file('archives/index.html', template.render(chysel={'entries': f, 'site': SITE}))
 
 @step
 def step_about(f, e):
     print '  %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'about.html', OUTPUT, 'about/')
-    template = e.get_template(TEMPLATES['about'])
+    template = e.get_template('about.html')
     write_file('about/index.html', template.render(chysel={'entry': f, 'site': SITE}))
 
 @step
