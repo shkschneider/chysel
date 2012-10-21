@@ -63,7 +63,7 @@ def get_tree(source):
                 f.readline()
                 files.append({'title': title,
                               'content': ''.join(f.readlines()).decode('UTF-8'),
-                              'url': '%.4d/%.2d/%.2d/%s.html' % (year, month, day, name),
+                              'url': '%.4d/%.2d/%.2d/%s/' % (year, month, day, name),
                               'date': time.strftime(TIME_FORMAT, date)})
     return files
 
@@ -92,7 +92,7 @@ def step_entries(f, e):
     '''Generate detail pages of individual posts'''
     template = e.get_template(TEMPLATES['entry'])
     for file in f:
-        write_file(file['url'], template.render(chysel={'entry': file, 'site': SITE}))
+        write_file(file['url'] + 'index.html', template.render(chysel={'entry': file, 'site': SITE}))
 
 @step
 def step_archive(f, e):
