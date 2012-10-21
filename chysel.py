@@ -66,7 +66,12 @@ def get_tree(source):
                               'except': content[:100],
                               'content': FORMAT(content),
                               'url': '%.4d/%.2d/%.2d/%s/' % (year, month, day, name),
-                              'date': time.strftime(TIME_FORMAT, date)})
+                              'date': time.strftime(TIME_FORMAT, date),
+                              'epoch': time.mktime(date),
+                              'year': year,
+                              'month': month,
+                              'day': day,
+                              'filename': name})
     return files
 
 def compare_entries(x, y):
