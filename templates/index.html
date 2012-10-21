@@ -1,7 +1,10 @@
-{% extends "base.html" %}
+{% extends "chysel.html" %}
 
 {% block content %}
   <h1>{{ chysel.site.name }}</h1>
+  <p>
+    Chysel is a very simple, lightweigh python static website generator.
+  </p>
   <hr />
   {% for entry in chysel.entries %}
      <p><a href="{{ chysel.site.url }}{{ entry.url }}">{{ entry.date }} &mdash; {{ entry.title }}</a></p>
