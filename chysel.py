@@ -124,9 +124,7 @@ if __name__ == '__main__':
     print '* Reading files...'
     files = sorted(get_tree(INPUT), cmp=compare_entries)
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
-    print '  Done'
     print '* Generating HTML...'
     for step in STEPS:
         step(files, env)
-    print '  Done'
-    print 'Done'
+    print 'Browse at: <%s>' % (SITE['url'])
