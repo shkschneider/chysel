@@ -61,8 +61,10 @@ def get_tree(source):
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
                 f.readline()
+                content = ''.join(f.readlines()).decode('UTF-8')
                 files.append({'title': title,
-                              'content': ''.join(f.readlines()).decode('UTF-8'),
+                              'except': content[:100],
+                              'content': FORMAT(content),
                               'url': '%.4d/%.2d/%.2d/%s/' % (year, month, day, name),
                               'date': time.strftime(TIME_FORMAT, date)})
     return files

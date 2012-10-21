@@ -6,7 +6,14 @@
     Chysel is a very simple, lightweigh python static website generator.
   </p>
   <hr />
-  {% for entry in chysel.entries %}
-     <p><a href="{{ chysel.site.url }}{{ entry.url }}">{{ entry.date }} &mdash; {{ entry.title }}</a></p>
-  {% endfor %}
+  <dl class="dl-horizontal">
+    {% for entry in chysel.entries %}
+      <dt>{{ entry.date }}</dt>
+      <dd>
+        <a href="{{ chysel.site.url }}{{ entry.url }}">{{ entry.title }}</a>
+        <span style="margin:1em">&mdash;</span>
+        <em>{{ entry.except }}</em>
+      </dd>
+    {% endfor %}
+  </dl>
 {% endblock %}
