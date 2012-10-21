@@ -27,7 +27,6 @@ SITE = {'url': 'http://shkschneider.me/', # trailing slash
 
 INPUT = './content/' # trailing slash
 OUTPUT = './www/' # trailing slash
-HOME_SHOW = 15
 TEMPLATE_PATH = './templates/'
 TEMPLATE_OPTIONS = {}
 TEMPLATES = {'index': 'index.html',
@@ -87,7 +86,7 @@ def write_file(url, data):
 def step_index(f, e):
     '''Generate homepage'''
     template = e.get_template(TEMPLATES['index'])
-    write_file('index.html', template.render(chysel={'entries': f[:HOME_SHOW], 'site': SITE}))
+    write_file('index.html', template.render(chysel={'entries': f, 'site': SITE}))
 
 @step
 def step_entries(f, e):
