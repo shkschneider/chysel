@@ -43,7 +43,6 @@ STEPS = []
 
 def step(func):
     def wrapper(*args, **kwargs):
-        print func.__name__
         func(*args, **kwargs)
     STEPS.append(wrapper)
     return wrapper
@@ -57,11 +56,13 @@ def get_tree(source):
             path = os.path.join(root, name)
             with open(path, 'rU') as f:
                 title = f.readline()
+                print '  -', name
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
                 f.readline()
                 content = ''.join(f.readlines()).decode('UTF-8')
-                files.append({'title': title,
+                files.append({'slug': name,
+                              'title': title,
                               'except': content[:100],
                               'content': FORMAT(content),
                               'url': '%.4d/%.2d/%.2d/%s/' % (year, month, day, name),
@@ -84,43 +85,43 @@ def write_file(url, data):
 
 @step
 def step_index(f, e):
-    '''Generate homepage'''
+    print '  %s%s -> %sindex.html' % (TEMPLATE_PATH, 'index.html', OUTPUT)
     template = e.get_template(TEMPLATES['index'])
     write_file('index.html', template.render(chysel={'entries': f, 'site': SITE}))
 
 @step
 def step_entries(f, e):
-    '''Generate detail pages of individual posts'''
     template = e.get_template(TEMPLATES['entry'])
     for file in f:
+        print '  %s%s -> %s%sindex.html' % (INPUT, file['slug'], OUTPUT, file['url'])
         write_file(file['url'] + 'index.html', template.render(chysel={'entry': file, 'site': SITE}))
 
 @step
 def step_archive(f, e):
-    '''Generate master archive list of all entries'''
+    print '  %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'archives.html', OUTPUT, 'archives/')
     template = e.get_template(TEMPLATES['archive'])
     write_file('archives/index.html', template.render(chysel={'entries': f, 'site': SITE}))
 
 @step
 def step_about(f, e):
-    '''Generate about page'''
+    print '  %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'about.html', OUTPUT, 'about/')
     template = e.get_template(TEMPLATES['about'])
     write_file('about/index.html', template.render(chysel={'entry': f, 'site': SITE}))
 
 @step
 def step_assets(f, e):
-    '''Copy assets (directories) from template to output folder'''
     for name in [name for name in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, name))]:
+        print '  %s%s -> %s%s' % (TEMPLATE_PATH, name, OUTPUT, name)
         dir_util.copy_tree(TEMPLATE_PATH + name, OUTPUT + name)
 
 if __name__ == '__main__':
-    print 'Chyseling...'
-    print '* Reading files...',
+    print 'Chyseling'
+    print '* Reading files...'
     files = sorted(get_tree(INPUT), cmp=compare_entries)
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
-    print 'Done.'
-    print '* Running steps...'
+    print '  Done'
+    print '* Generating HTML...'
     for step in STEPS:
-        print '  ',
         step(files, env)
-    print 'Done.'
+    print '  Done'
+    print 'Done'
