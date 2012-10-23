@@ -49,10 +49,12 @@ def get_tree(source):
         for name in fs:
             if name[0] == '.':
                 continue
+            if not re.match(r'^.+\.(md|markdown)$', name):
+                continue
             path = os.path.join(root, name)
             with open(path, 'rU') as f:
                 title = f.readline()
-                name = path.replace(INPUT, '')
+                name = re.sub(r'\.[^\.]+$', '', path.replace(INPUT, ''))
                 print '  -', name
                 category = os.path.dirname(name)
                 if len(category):
