@@ -10,7 +10,6 @@
 try:
     from distutils import dir_util
     import markdown
-    import codecs
     import jinja2
     import time
     import sys
@@ -31,7 +30,14 @@ TEMPLATE_PATH = './templates/'
 TEMPLATE_OPTIONS = {}
 TIME_FORMAT = '%B %d, %Y'
 ENTRY_TIME_FORMAT = '%Y/%m/%d'
-FORMAT = lambda text: markdown.markdown(text, ['footnotes'])
+TABLEOFCONTENT = True
+FORMAT = lambda text: markdown.markdown(text, ['abbr',
+                                               'def_list',
+                                               'fenced_code',
+                                               'footnotes',
+                                               'tables',
+                                               'codehilite(force_linenos=True)',
+                                               'toc'])
 
 ### DO NOT EDIT BELOW THIS LINE ###
 
@@ -62,7 +68,10 @@ def get_tree(source):
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
                 f.readline()
-                content = ''.join(f.readlines()).decode('UTF-8')
+                content = ''
+                if TABLEOFCONTENT:
+                    content += '**Table Of Content**\n' + '\n' + '[TOC]\n' + '\n' + '-----' + '\n'
+                content += ''.join(f.readlines()).decode('UTF-8')
                 files.append({'slug': name,
                               'title': title,
                               'except': content[:100],
