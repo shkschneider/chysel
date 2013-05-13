@@ -26,7 +26,7 @@ SITE = {'url': 'http://shkschneider.me/', # trailing slash
 
 INPUT = './content/' # trailing slash
 OUTPUT = './www/' # trailing slash
-TEMPLATE_PATH = './templates/'
+TEMPLATE_PATH = './template/'
 TEMPLATE_OPTIONS = {}
 TIME_FORMAT = '%B %d, %Y'
 ENTRY_TIME_FORMAT = '%Y/%m/%d'
