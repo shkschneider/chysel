@@ -1,0 +1,17 @@
+body {
+    overflow-y: scroll;
+}
+td.code div.codehilite pre {
+    background: #333;
+}
+div.linenodiv pre {
+    background: #333;
+    color: #FFF;
+    margin-right: .25em;
+}
+pre {
+    color: #FFF;
+}
+code {
+    color: #333;
+}
