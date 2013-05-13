@@ -21,7 +21,7 @@ except ImportError as error:
 
 ### SETTINGS ###
 
-SITE = {'url': 'http://shkschneider.me/', # trailing slash
+SITE = {'url': 'https://shkschneider.me/', # trailing slash
         'name': 'Chysel'}
 
 INPUT = './content/' # trailing slash
