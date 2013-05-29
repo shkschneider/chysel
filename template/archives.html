@@ -6,7 +6,7 @@
   {% for year, year_list in chysel.entries | groupby('year') | reverse %}
     <h2>{{ year }}</h2>
     {% for month, month_list in year_list | groupby('month') | reverse %}
-      <h3>{{ month }}/{{ year }}</h3>
+      <h3>{{ month }} {{ year }}</h3>
       {% for day, day_list in month_list | groupby('day') | reverse %}
         <dl class="dl-horizontal">
           {% for entry in day_list %}
