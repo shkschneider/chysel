@@ -16,7 +16,7 @@ try:
     import os
     import re
 except ImportError as error:
-    print 'ImportError: ', str(error)
+    print 'ImportError:', str(error)
     exit(1)
 
 ### SETTINGS ###
@@ -75,7 +75,7 @@ def get_tree(source):
                               'date': time.strftime(TIME_FORMAT, date),
                               'epoch': time.mktime(date),
                               'year': year,
-                              'month': month,
+                              'month': time.strftime('%B', date),
                               'day': day,
                               'filename': name})
     return files
