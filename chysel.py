@@ -57,7 +57,7 @@ def get_tree(source):
                 continue
             path = os.path.join(root, name)
             with open(path, 'rU') as f:
-                title = f.readline()
+                title = f.readline().strip('\n\t')
                 name = re.sub(r'\.[^\.]+$', '', path.replace(INPUT, ''))
                 print '  -', name
                 category = os.path.dirname(name)
