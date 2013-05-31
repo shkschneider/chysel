@@ -2,12 +2,12 @@ Example
 2013/05/13
 
 > Here comes the content.
+>
+> You can use plain text, HTML or Markdown.
 
-You can, of course, use <strong>HTML</strong>.
+&nbsp; Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-> And here are some code:
-
-~~~~.java
-Intent intent = new Intent(this, MyActivity.class);
-startActivity(intent);
-~~~~
+> See full Markdown syntax at <[daringfireball.net/projects/markdown/syntax](http://daringfireball.net/projects/markdown/syntax)>.
