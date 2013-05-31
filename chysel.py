@@ -96,8 +96,8 @@ if __name__ == '__main__':
     write_file('archives/index.html', environment.get_template('archives.html').render(chysel={'entries': entries, 'site': SITE}))
 
     for asset in [asset for asset in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, asset))]:
-    print '   %s%s -> %s%s/' % (TEMPLATE_PATH, asset, OUTPUT, asset)
-    dir_util.copy_tree(TEMPLATE_PATH + asset, OUTPUT + asset)
+        print '   %s%s -> %s%s/' % (TEMPLATE_PATH, asset, OUTPUT, asset)
+        dir_util.copy_tree(TEMPLATE_PATH + asset, OUTPUT + asset)
 
     print ' * Generating entries...'
 
