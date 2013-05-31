@@ -23,7 +23,6 @@ except ImportError as error:
 
 SITE = {'url': '/', # trailing slash
         'name': 'Chysel'}
-
 INPUT = './content/' # trailing slash
 OUTPUT = './www/' # trailing slash
 TEMPLATE_PATH = './template/'
@@ -39,15 +38,7 @@ FORMAT = lambda text: markdown.markdown(text, ['abbr',
 
 ### DO NOT EDIT BELOW THIS LINE ###
 
-STEPS = []
-
-def step(func):
-    def wrapper(*args, **kwargs):
-        func(*args, **kwargs)
-    STEPS.append(wrapper)
-    return wrapper
-
-def get_tree(source):
+def parse(source):
     files = []
     for root, ds, fs in os.walk(source):
         for name in fs:
@@ -80,12 +71,6 @@ def get_tree(source):
                               'filename': name})
     return files
 
-def compare_entries(x, y):
-    result = cmp(-x['epoch'], -y['epoch'])
-    if result == 0:
-        return -cmp(x['filename'], y['filename'])
-    return result
-
 def write_file(url, data):
     path = OUTPUT + url
     dirs = os.path.dirname(path)
@@ -94,43 +79,30 @@ def write_file(url, data):
     with open(path, 'w') as f:
         f.write(data.encode('UTF-8'))
 
-@step
-def step_index(f, e):
-    print '  %s%s -> %sindex.html' % (TEMPLATE_PATH, 'index.html', OUTPUT)
-    template = e.get_template('index.html')
-    write_file('index.html', template.render(chysel={'entries': f, 'site': SITE}))
-
-@step
-def step_entries(f, e):
-    template = e.get_template('entry.html')
-    for file in f:
-        print '  %s%s -> %s%sindex.html' % (INPUT, file['slug'], OUTPUT, file['url'])
-        write_file(file['url'] + 'index.html', template.render(chysel={'entry': file, 'site': SITE}))
-
-@step
-def step_archive(f, e):
-    print '  %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'archives.html', OUTPUT, 'archives/')
-    template = e.get_template('archives.html')
-    write_file('archives/index.html', template.render(chysel={'entries': f, 'site': SITE}))
-
-@step
-def step_about(f, e):
-    print '  %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'about.html', OUTPUT, 'about/')
-    template = e.get_template('about.html')
-    write_file('about/index.html', template.render(chysel={'entry': f, 'site': SITE}))
-
-@step
-def step_assets(f, e):
-    for name in [name for name in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, name))]:
-        print '  %s%s -> %s%s' % (TEMPLATE_PATH, name, OUTPUT, name)
-        dir_util.copy_tree(TEMPLATE_PATH + name, OUTPUT + name)
-
 if __name__ == '__main__':
     print 'Chyseling'
-    print '* Reading files...'
-    files = sorted(get_tree(INPUT), cmp=compare_entries)
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
-    print '* Generating HTML...'
-    for step in STEPS:
-        step(files, env)
+
+    print ' * Reading entries...'
+
+    entries = parse(INPUT)
+    environment = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
+
+    print ' * Generating site...'
+
+    print '   %s%s -> %sindex.html' % (TEMPLATE_PATH, 'index.html', OUTPUT)
+    write_file('index.html', environment.get_template('index.html').render(chysel={'entries': entries, 'site': SITE}))
+
+    print '   %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'archives.html', OUTPUT, 'archives/')
+    write_file('archives/index.html', environment.get_template('archives.html').render(chysel={'entries': entries, 'site': SITE}))
+
+    for asset in [asset for asset in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, asset))]:
+    print '   %s%s -> %s%s/' % (TEMPLATE_PATH, asset, OUTPUT, asset)
+    dir_util.copy_tree(TEMPLATE_PATH + asset, OUTPUT + asset)
+
+    print ' * Generating entries...'
+
+    for entry in entries:
+        print '   %s%s -> %s%sindex.html' % (INPUT, entry['slug'], OUTPUT, entry['url'])
+        write_file(entry['url'] + 'index.html', environment.get_template('entry.html').render(chysel={'entry': entry, 'site': SITE}))
+
     print 'Browse at: <%s>' % (SITE['url'])
