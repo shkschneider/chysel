@@ -12,7 +12,7 @@ Features
 --------
 
 - Done in pure Python
-- Markdown syntax
+- Plain Text / HTML / Markdown syntax
 - Jinja2 templates
 - Bootstrap default theme
 - Nice urls
@@ -20,13 +20,44 @@ Features
 Usage
 -----
 
-Edit `chysel.py` toconfigure it.
+Edit `chysel.py` to configure it.
+
+    SITE = {'url': '/', # trailing slash
+            'name': 'Chysel'}
+    INPUT = './content/' # trailing slash
+    OUTPUT = '../www/' # trailing slash
+    TEMPLATE_PATH = './template/'
+    TEMPLATE_OPTIONS = {}
+    TIME_FORMAT = '%B %d, %Y'
+    ENTRY_TIME_FORMAT = '%Y/%m/%d'
 
 Then generate the website:
 
-    python chysel.py
+    $ python chysel.py
+    Chyseling
+    * Reading files...
+      - example
+    * Generating HTML...
+      ./template/index.html -> ../www/index.html
+      ./content/example -> ../www/example/index.html
+      ./template/archives.html -> ../www/archives/index.html
+      ./template/about.html -> ../www/about/index.html
+      ./template/js -> ../www/js
+      ./template/css -> ../www/css
+      ./template/img -> ../www/img
+    Browse at: </>
+    $
 
-Website is now fully static and in `./www/`.
+Website is now fully static, in `./www/`.
+
+    $ ls -l ./www/
+    d--------- about/
+    d--------- archives/
+    d--------- css/
+    d--------- example/
+    d--------- img/
+    d--------- index.html
+    d--------- js/
 
 Format
 ------
