@@ -72,8 +72,10 @@ Entries are created as flat files in `./content/` and will be generated as html 
 
 Formatting is done using Markdown syntax.
 
-    The First Line Contains The Title
-    2012/12/24
+    The First Line Contains The Title <<< Title
+    2012/24/12                        <<< Date YYYY/DD/MM
+    Opened                            <<< Comments 'Opened' or 'Closed'
+    1                                 <<< Revision number, '0' to hide
 
     Hello world!
 

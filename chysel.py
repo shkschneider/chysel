@@ -56,6 +56,8 @@ def parse(source):
                     title = category.capitalize() + '/ ' + title
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
+                comments = f.readline().strip() == 'Opened'
+                revision = int(f.readline().strip())
                 f.readline()
                 content = ''.join(f.readlines()).decode('UTF-8')
                 files.append({'slug': name,
@@ -68,6 +70,8 @@ def parse(source):
                               'year': year,
                               'month': time.strftime('%B', date),
                               'day': day,
+                              'comments': comments,
+                              'revision': revision,
                               'filename': name})
     return files
 

@@ -5,12 +5,17 @@
 
 {% block content %}
   <h1>{{ chysel.entry.title }}</h1>
+  {% if chysel.entry.revision > 0 %}
+  <strong>{{ chysel.entry.date }}, revision {{ chysel.entry.revision }}</strong>
+  {% else %}
   <strong>{{ chysel.entry.date }}</strong>
+  {% endif %}
   <hr />
   <p>{{ chysel.entry.content }}</p>
 {% endblock %}
 
 {% block footer %}
+  {% if chysel.entry.comments %}
   <div id="disqus_thread"></div>
   <script type="text/javascript">
     var disqus_shortname = 'DISQUS_ID';
@@ -20,4 +25,5 @@
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
   </script>
+  {% endif %}
 {% endblock %}
