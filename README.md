@@ -33,6 +33,10 @@ Edit `chysel.py` to configure it.
     TIME_FORMAT = '%B %d, %Y'
     ENTRY_TIME_FORMAT = '%Y/%m/%d'
 
+Edit `template/entry.html` to use disqus (or remove it).
+
+    DISQUS_ID = 'PUT_YOUR_ID_HERE';
+
 Then generate the website:
 
     $ python chysel.py
