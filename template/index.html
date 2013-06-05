@@ -1,5 +1,8 @@
 {% extends "chysel.html" %}
 
+{% block header %}
+{% endblock %}
+
 {% block content %}
   <h1>{{ chysel.site.name }}</h1>
   <p>
@@ -16,4 +19,7 @@
       </dd>
     {% endfor %}
   </dl>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}
