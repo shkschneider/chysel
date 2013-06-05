@@ -7,6 +7,7 @@ Authors
 - Final work: Alan Schneider <https://github.com/shkschneider/chysel>
 - Original work: David Zhou <https://github.com/dz/chisel>
 - Bootstrap: Twitter <http://twitter.github.com/bootstrap/>
+- Disqus <http://disqus.com>
 
 Features
 --------
@@ -16,6 +17,7 @@ Features
 - Jinja2 templates
 - Bootstrap default theme
 - Nice urls
+- Comments on entries by Disqus
 
 Usage
 -----
@@ -25,7 +27,7 @@ Edit `chysel.py` to configure it.
     SITE = {'url': '/', # trailing slash
             'name': 'Chysel'}
     INPUT = './content/' # trailing slash
-    OUTPUT = '../www/' # trailing slash
+    OUTPUT = './www/' # trailing slash
     TEMPLATE_PATH = './template/'
     TEMPLATE_OPTIONS = {}
     TIME_FORMAT = '%B %d, %Y'
@@ -35,16 +37,16 @@ Then generate the website:
 
     $ python chysel.py
     Chyseling
-    * Reading files...
+    * Reading entries...
       - example
-    * Generating HTML...
+    * Generating site...
       ./template/index.html -> ../www/index.html
-      ./content/example -> ../www/example/index.html
       ./template/archives.html -> ../www/archives/index.html
-      ./template/about.html -> ../www/about/index.html
-      ./template/js -> ../www/js
-      ./template/css -> ../www/css
-      ./template/img -> ../www/img
+      ./template/js -> ../www/js/
+      ./template/img -> ../www/img/
+      ./template/css -> ../www/css/
+    * Generating entries...
+      ./content/example -> ../www/example/index.html
     Browse at: </>
     $
 
