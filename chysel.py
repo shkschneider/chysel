@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     print ' * Reading entries...'
 
-    entries = parse(INPUT)
+    entries = sorted(parse(INPUT), key=lambda entry: entry['epoch'], reverse=True)
     environment = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
 
     print ' * Generating site...'
