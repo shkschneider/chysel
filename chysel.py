@@ -29,13 +29,14 @@ TEMPLATE_PATH = './template/'
 TEMPLATE_OPTIONS = {}
 TIME_FORMAT = '%B %d, %Y'
 ENTRY_TIME_FORMAT = '%Y/%m/%d'
+DISQUS_ID = '' # empty if always disabled
+
 FORMAT = lambda text: markdown.markdown(text, ['abbr',
                                                'def_list',
                                                'fenced_code',
                                                'footnotes',
                                                'tables',
                                                'codehilite(force_linenos=True)'])
-DISQUS_ID = '' # empty if always disabled
 
 ### DO NOT EDIT BELOW THIS LINE ###
 
@@ -58,7 +59,7 @@ def parse(source):
                     full_title = category.capitalize() + '/ ' + title
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
-                comments = f.readline().strip() == 'Opened'
+                comments = re.match('^(Yes|Open(ed)?)$', f.readline().strip(), flags=re.IGNORECASE)
                 revision = int(re.sub('[^0-9]', '', f.readline().strip()))
                 f.readline()
                 content = ''.join(f.readlines()).decode('UTF-8')
