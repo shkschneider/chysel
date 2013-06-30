@@ -21,6 +21,11 @@ Features
 - Nice urls (without url rewriting)
 - Comments on entries by Disqus
 
+Dependencies
+------------
+
+    $ pip install --upgrade [--user] -r requirements.txt
+
 Usage
 -----
 
@@ -67,6 +72,11 @@ Website is now fully static, in `./www/`.
     d--------- img/
     d--------- index.html
     d--------- js/
+
+You can quickly browse it using SimpleHTTPServer:
+
+    $ cd ./www
+    $ python -m SimpleHTTPServer 8080
 
 Format
 ------
