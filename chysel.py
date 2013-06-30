@@ -35,6 +35,7 @@ FORMAT = lambda text: markdown.markdown(text, ['abbr',
                                                'footnotes',
                                                'tables',
                                                'codehilite(force_linenos=True)'])
+DISQUS_ID = '' # empty if always disabled
 
 ### DO NOT EDIT BELOW THIS LINE ###
 
@@ -49,19 +50,22 @@ def parse(source):
             path = os.path.join(root, name)
             with open(path, 'rU') as f:
                 title = f.readline().strip('\n\t')
+                full_title = title
                 name = os.path.splitext(path.replace(INPUT, ''))[0]
                 print '  -', name
                 category = os.path.dirname(name)
                 if len(category):
-                    title = category.capitalize() + '/ ' + title
+                    full_title = category.capitalize() + '/ ' + title
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
                 comments = f.readline().strip() == 'Opened'
-                revision = int(f.readline().strip())
+                revision = int(re.sub('[^0-9]', '', f.readline().strip()))
                 f.readline()
                 content = ''.join(f.readlines()).decode('UTF-8')
                 files.append({'slug': name,
                               'title': title,
+                              'full_title': full_title,
+                              'category': category,
                               'except': content[:100],
                               'content': FORMAT(content),
                               'url': name + '/',
@@ -99,6 +103,9 @@ if __name__ == '__main__':
     print '   %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'archives.html', OUTPUT, 'archives/')
     write_file('archives/index.html', environment.get_template('archives.html').render(chysel={'entries': entries, 'site': SITE}))
 
+    print '   %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'categories.html', OUTPUT, 'categories/')
+    write_file('categories/index.html', environment.get_template('categories.html').render(chysel={'entries': entries, 'site': SITE}))
+
     for asset in [asset for asset in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, asset))]:
         print '   %s%s -> %s%s/' % (TEMPLATE_PATH, asset, OUTPUT, asset)
         dir_util.copy_tree(TEMPLATE_PATH + asset, OUTPUT + asset)
@@ -107,6 +114,18 @@ if __name__ == '__main__':
 
     for entry in entries:
         print '   %s%s -> %s%sindex.html' % (INPUT, entry['slug'], OUTPUT, entry['url'])
-        write_file(entry['url'] + 'index.html', environment.get_template('entry.html').render(chysel={'entry': entry, 'site': SITE}))
+        write_file(entry['url'] + 'index.html', environment.get_template('entry.html').render(chysel={'disqus_id': DISQUS_ID, 'entry': entry, 'site': SITE}))
+
+    print ' * Generating categories...'
+
+    categories = {}
+    for entry in entries:
+        if (len(entry['category'])):
+            if (not categories.has_key(entry['category'])):
+                categories[entry['category']] = []
+            categories[entry['category']].append(entry)
+    for category in categories:
+        print '   %s%s -> %s%s/index.html' % (INPUT, category, OUTPUT, category)
+        write_file(category + '/index.html', environment.get_template('category.html').render(chysel={'category': category.capitalize(), 'entries': categories[category], 'site': SITE}))
 
     print 'Browse at: <%s>' % (SITE['url'])

@@ -13,6 +13,9 @@
     {% for entry in chysel.entries %}
       <dt>{{ entry.date }}</dt>
       <dd>
+        {% if entry.category | length %}
+          <a href="{{ chysel.site.url }}{{ entry.category }}/">{{ entry.category.capitalize() }}</a>/
+        {% endif %}
         <a href="{{ chysel.site.url }}{{ entry.url }}">{{ entry.title }}</a>
         <span style="margin:1em">&mdash;</span>
         <em>{{ entry.except }}</em>

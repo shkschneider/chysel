@@ -13,11 +13,12 @@
       {% for day, day_list in month_list | groupby('day') | reverse %}
         <dl class="dl-horizontal">
           {% for entry in day_list %}
-            <dt>{{ entry.date }}</dt>
+            <dt>{{ entry.day }}</dt>
             <dd>
+              {% if entry.category | length %}
+                <a href="{{ chysel.site.url }}{{ entry.category }}/">{{ entry.category.capitalize() }}</a>/
+              {% endif %}
               <a href="{{ chysel.site.url }}{{ entry.url }}">{{ entry.title }}</a>
-              <span style="margin:1em">&mdash;</span>
-              <em>{{ entry.except }}</em>
             </dd>
           {% endfor %}
         </dl>
