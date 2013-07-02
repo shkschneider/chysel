@@ -6,8 +6,10 @@ Authors
 
 - Final work: Alan Schneider <https://github.com/shkschneider/chysel>
 - Original work: David Zhou <https://github.com/dz/chisel>
-- Bootstrap: Twitter <http://twitter.github.com/bootstrap/>
-- Pygments: <http://pygments.org/docs/authors/>
+- Bootstrap: Twitter <http://twitter.github.io/bootstrap>
+- Pygments:
+  - <http://pygments.org/docs/authors/>
+  - <https://raw.github.com/richleland/pygments-css>
 - Disqus <http://disqus.com>
 
 Features
