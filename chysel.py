@@ -51,12 +51,9 @@ def parse(source):
             path = os.path.join(root, name)
             with open(path, 'rU') as f:
                 title = f.readline().strip('\n\t')
-                full_title = title
                 name = os.path.splitext(path.replace(INPUT, ''))[0]
                 print '  -', name
                 category = os.path.dirname(name)
-                if len(category):
-                    full_title = category.capitalize() + '/ ' + title
                 date = time.strptime(f.readline().strip(), ENTRY_TIME_FORMAT)
                 year, month, day = date[:3]
                 comments = re.match('^(Yes|Open(ed)?)$', f.readline().strip(), flags=re.IGNORECASE)
@@ -65,7 +62,6 @@ def parse(source):
                 content = ''.join(f.readlines()).decode('UTF-8')
                 files.append({'slug': name,
                               'title': title,
-                              'full_title': full_title,
                               'category': category,
                               'except': content[:100],
                               'content': FORMAT(content),
@@ -97,15 +93,25 @@ if __name__ == '__main__':
     environment = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
 
     print ' * Generating site...'
+    
+    categories = []
+    for entry in entries:
+        if (len(entry['category'])):
+        idx = [x for x in range(len(categories)) if categories[x]['name'] == entry['category']]
+        idx = idx[0] if len(idx) else -1
+        if idx < 0:
+            categories.append({'name': entry['category'], 'count': 0, 'entries': []})
+        categories[idx]['count'] += 1
+        categories[idx]['entries'].append(entry)
 
     print '   %s%s -> %sindex.html' % (TEMPLATE_PATH, 'index.html', OUTPUT)
-    write_file('index.html', environment.get_template('index.html').render(chysel={'entries': entries, 'site': SITE}))
+    write_file('index.html', environment.get_template('index.html').render(chysel={'categories': categories, 'entries': entries, 'site': SITE}))
 
     print '   %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'archives.html', OUTPUT, 'archives/')
-    write_file('archives/index.html', environment.get_template('archives.html').render(chysel={'entries': entries, 'site': SITE}))
+    write_file('archives/index.html', environment.get_template('archives.html').render(chysel={'categories': categories, 'entries': entries, 'site': SITE}))
 
     print '   %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'categories.html', OUTPUT, 'categories/')
-    write_file('categories/index.html', environment.get_template('categories.html').render(chysel={'entries': entries, 'site': SITE}))
+    write_file('categories/index.html', environment.get_template('categories.html').render(chysel={'categories': categories, 'site': SITE}))
 
     for asset in [asset for asset in os.listdir(TEMPLATE_PATH) if os.path.isdir(os.path.join(TEMPLATE_PATH, asset))]:
         print '   %s%s -> %s%s/' % (TEMPLATE_PATH, asset, OUTPUT, asset)
@@ -118,15 +124,9 @@ if __name__ == '__main__':
         write_file(entry['url'] + 'index.html', environment.get_template('entry.html').render(chysel={'disqus_id': DISQUS_ID, 'entry': entry, 'site': SITE}))
 
     print ' * Generating categories...'
-
-    categories = {}
-    for entry in entries:
-        if (len(entry['category'])):
-            if (not categories.has_key(entry['category'])):
-                categories[entry['category']] = []
-            categories[entry['category']].append(entry)
+    
     for category in categories:
-        print '   %s%s -> %s%s/index.html' % (INPUT, category, OUTPUT, category)
-        write_file(category + '/index.html', environment.get_template('category.html').render(chysel={'category': category.capitalize(), 'entries': categories[category], 'site': SITE}))
+        print '   %s%s -> %s%s/index.html' % (INPUT, category['name'], OUTPUT, category['name'])
+        write_file(category['name'] + '/index.html', environment.get_template('category.html').render(chysel={'category': category, 'site': SITE}))
 
     print 'Browse at: <%s>' % (SITE['url'])
