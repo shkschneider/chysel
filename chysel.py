@@ -93,16 +93,16 @@ if __name__ == '__main__':
     environment = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_PATH), **TEMPLATE_OPTIONS)
 
     print ' * Generating site...'
-    
+
     categories = []
     for entry in entries:
         if (len(entry['category'])):
-        idx = [x for x in range(len(categories)) if categories[x]['name'] == entry['category']]
-        idx = idx[0] if len(idx) else -1
-        if idx < 0:
-            categories.append({'name': entry['category'], 'count': 0, 'entries': []})
-        categories[idx]['count'] += 1
-        categories[idx]['entries'].append(entry)
+            idx = [x for x in range(len(categories)) if categories[x]['name'] == entry['category']]
+            idx = idx[0] if len(idx) else -1
+            if idx < 0:
+                categories.append({'name': entry['category'], 'count': 0, 'entries': []})
+            categories[idx]['count'] += 1
+            categories[idx]['entries'].append(entry)
 
     print '   %s%s -> %sindex.html' % (TEMPLATE_PATH, 'index.html', OUTPUT)
     write_file('index.html', environment.get_template('index.html').render(chysel={'categories': categories, 'entries': entries, 'site': SITE}))
@@ -124,7 +124,7 @@ if __name__ == '__main__':
         write_file(entry['url'] + 'index.html', environment.get_template('entry.html').render(chysel={'disqus_id': DISQUS_ID, 'entry': entry, 'site': SITE}))
 
     print ' * Generating categories...'
-    
+
     for category in categories:
         print '   %s%s -> %s%s/index.html' % (INPUT, category['name'], OUTPUT, category['name'])
         write_file(category['name'] + '/index.html', environment.get_template('category.html').render(chysel={'category': category, 'site': SITE}))

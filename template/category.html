@@ -7,7 +7,7 @@
   <h1>{{ chysel.category['name'] }}</h1>
   <hr />
   <dl class="dl-horizontal">
-  {% for entry in chysel.category['entries']' %}
+  {% for entry in chysel.category['entries'] %}
     <dt>{{ entry.date }}</dt>
     <dd>
       <a href="{{ chysel.site.url }}{{ entry.url }}">{{ entry.title.replace(chysel.category['name'] + '/', '') }}</a>
