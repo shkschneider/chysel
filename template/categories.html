@@ -7,11 +7,9 @@
   <h1>Categories</h1>
   <hr />
   <dl class="dl-horizontal">
-  {% for category, category_list in chysel.entries | groupby('category') | reverse %}
-    {% if category | length %}
-      <dt><a href="{{ chysel.site.url }}{{ category }}/">{{ category.capitalize() }}</a></dt>
-      <dd>{{ category_list | count }} entries</dd>
-    {% endif %}
+  {% for category in chysel.categories | sort(attribute='count') | reverse %}
+    <dt><a href="{{ chysel.site.url }}{{ category['name'] }}/">{{ category['name'].capitalize() }}</a></dt>
+    <dd>{{ category['count'] }} entries</dd>
   {% endfor %}
   </dl>
 {% endblock %}
