@@ -29,6 +29,7 @@ TEMPLATE_PATH = './template/'
 TEMPLATE_OPTIONS = {}
 TIME_FORMAT = '%B %d, %Y'
 ENTRY_TIME_FORMAT = '%Y/%m/%d'
+ENTRIES_ON_HOME=10
 DISQUS_ID = '' # empty if always disabled
 
 FORMAT = lambda text: markdown.markdown(text, ['abbr',
@@ -105,7 +106,7 @@ if __name__ == '__main__':
             categories[idx]['entries'].append(entry)
 
     print '   %s%s -> %sindex.html' % (TEMPLATE_PATH, 'index.html', OUTPUT)
-    write_file('index.html', environment.get_template('index.html').render(chysel={'categories': categories, 'entries': entries, 'site': SITE}))
+    write_file('index.html', environment.get_template('index.html').render(chysel={'categories': categories, 'entries': entries[:ENTRIES_ON_HOME], 'site': SITE}))
 
     print '   %s%s -> %s%sindex.html' % (TEMPLATE_PATH, 'archives.html', OUTPUT, 'archives/')
     write_file('archives/index.html', environment.get_template('archives.html').render(chysel={'categories': categories, 'entries': entries, 'site': SITE}))
