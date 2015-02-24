@@ -4,13 +4,11 @@ Chysel
 Authors
 -------
 
-- Final work: Alan Schneider <https://github.com/shkschneider/chysel>
-- Original work: David Zhou <https://github.com/dz/chisel>
-- Bootstrap: Twitter <http://twitter.github.io/bootstrap>
-- Pygments:
-  - <http://pygments.org/docs/authors/>
-  - <https://raw.github.com/richleland/pygments-css>
-- Disqus <http://disqus.com>
+- Alan Schneider https://github.com/shkschneider/chysel
+- Original work: David Zhou https://github.com/dz/chisel
+- Bootstrap: Twitter http://getbootstrap.com
+- Pygments: http://pygments.org/docs/authors/
+- Disqus: http://disqus.com
 
 Features
 --------
@@ -96,4 +94,4 @@ Formatting is done using Markdown syntax.
 
     ...
 
-Read more about Markdown: <http://daringfireball.net/projects/markdown/>
+Read more about Markdown: http://daringfireball.net/projects/markdown/
